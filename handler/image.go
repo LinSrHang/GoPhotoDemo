@@ -246,7 +246,7 @@ func AddZippedImages(ctx *gin.Context) {
 		return
 	}
 
-	tmpFilename := "./tmpZip" + strconv.Itoa(time.Now().Nanosecond()) + ".zip"
+	tmpFilename := "tmpZip" + strconv.Itoa(time.Now().Nanosecond()) + ".zip"
 	zipfile, _ := os.Create(tmpFilename)
 	io.Copy(zipfile, uploadFile)
 	zipfile.Close()
@@ -261,7 +261,6 @@ func AddZippedImages(ctx *gin.Context) {
 		ctx.Abort()
 		return
 	}
-	defer zipReader.Close()
 
 	ch := make(chan bool, viper.GetInt("maxUnzipThreadNum"))
 	wg := &sync.WaitGroup{}
@@ -303,9 +302,6 @@ func AddZippedImages(ctx *gin.Context) {
 
 			// 检查sum256是否重复
 			if ok := utils.CheckSum256InSum256Map(sum256); ok {
-				ctx.JSON(http.StatusConflict, gin.H{
-					"error": "File already exists",
-				})
 				logger.Logger.Println("File already exists. where=" + file.Name)
 				<-ch
 				wg.Done()
@@ -336,7 +332,11 @@ func AddZippedImages(ctx *gin.Context) {
 
 	wg.Wait()
 
-	os.Remove(tmpFilename) // 删除zip缓存文件
+	zipReader.Close()
+	// 删除zip缓存文件
+	if err := os.Remove(tmpFilename); err != nil {
+		logger.Logger.Println("Internal server error: Failed to delete zip file")
+	}
 	ctx.JSON(http.StatusOK, gin.H{
 		"message": "Zip uploaded and unzipped successfully",
 	})
