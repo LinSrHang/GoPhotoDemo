@@ -1,0 +1,12 @@
+mode: debug
+port: :8080
+serverUrl: http://127.0.0.1:8080
+indexPageSize: 10
+allowOrigins: [http://10.61.148.37, http://localhost, http://127.0.0.1]
+imageQualityHigh: 100
+imageQualityLow: 15
+
+originalPrefix: ./static/original/
+thumbnailPrefix: ./static/thumbnail/
+
+maxUnzipThreadNum: 10
