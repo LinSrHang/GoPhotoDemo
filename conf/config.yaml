@@ -10,3 +10,6 @@ originalPrefix: ./static/original/
 thumbnailPrefix: ./static/thumbnail/
 
 maxUnzipThreadNum: 10
+
+user: admin
+password: admin
