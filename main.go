@@ -44,6 +44,7 @@ func HandlerStart() {
 				static.POST("/post", handler.AddImages)
 				static.GET("/fidList", handler.GetFidListPagingQuery)
 				static.POST("/postZip", handler.AddZippedImages)
+				static.POST("/refresh", handler.Refresh)
 			}
 		}
 	}
