@@ -20,6 +20,7 @@ v1
 ├── handler/
 │   ├── image.go
 │   ├── index.go
+│   ├── refresh.go
 │   └── upload.go
 ├── logger/
 │   └── logger.go
